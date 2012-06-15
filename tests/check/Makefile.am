@@ -147,6 +147,21 @@ else
 check_opus =
 endif
 
+if USE_CURL
+check_curl = elements/curlhttpsink \
+	elements/curlfilesink \
+	elements/curlftpsink \
+	elements/curlsmtpsink
+else
+check_curl =
+endif
+
+if USE_OPENCV
+check_opencv = elements/opencv/templatematch-colorspace.sh
+else
+check_opencv =
+endif
+
 VALGRIND_TO_FIX = \
 	elements/mpeg2enc \
 	elements/mplex    \
@@ -209,9 +224,12 @@ check_PROGRAMS = \
 	$(check_orc) \
 	$(EXPERIMENTAL_CHECKS)
 
+check_SCRIPTS = \
+	$(check_opencv)
+
 noinst_HEADERS = elements/mxfdemux.h
 
-TESTS = $(check_PROGRAMS)
+TESTS = $(check_PROGRAMS) $(check_SCRIPTS)
 
 AM_CFLAGS = $(GST_CHECK_CFLAGS) $(GST_OPTION_CFLAGS) \
 		-DGST_TEST_FILES_PATH="\"$(TEST_FILES_DIRECTORY)\"" \
