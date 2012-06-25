@@ -63,6 +63,7 @@
 
 #include <gst/gst.h>
 
+#include "../../gst-libs/gst/gst-i18n-plugin.h"
 #include "gstopencvutils.h"
 #include "gsttemplatematch.h"
 
@@ -423,8 +424,15 @@ gst_template_match_load_template (GstTemplateMatch * filter, gchar * template)
   if (template) {
     newTemplateImage = cvLoadImage (template, CV_LOAD_IMAGE_COLOR);
     if (!newTemplateImage) {
+      /* Unfortunately OpenCV doesn't seem to provide any way of finding out
+         why the image load failed, so we can't be more specific than FAILED: */
+      GST_ELEMENT_WARNING (filter, RESOURCE, FAILED,
+          (_("OpenCV failed to load template image")),
+          ("While attempting to load template '%s'", template));
       GST_WARNING ("Couldn't load template image: %s. error: %s",
           template, g_strerror (errno));
+      g_free (template);
+      template = NULL;
     }
   }
 

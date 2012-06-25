@@ -157,7 +157,8 @@ check_curl =
 endif
 
 if USE_OPENCV
-check_opencv = elements/opencv/templatematch-colorspace.sh
+check_opencv = elements/opencv/templatematch-colorspace.sh \
+	elements/opencv/templatematch-missing-template.sh
 else
 check_opencv =
 endif
